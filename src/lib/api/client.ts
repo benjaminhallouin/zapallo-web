@@ -83,13 +83,18 @@ export class ApiClient {
       }
 
       // Handle successful response
+      // Check for 204 No Content first (no body to parse)
+      if (response.status === 204) {
+        return undefined as T;
+      }
+
       // Check if response has content
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
         return await response.json();
       }
 
-      // For DELETE requests or empty responses
+      // For other empty responses
       return undefined as T;
     } catch (error) {
       clearTimeout(timeoutId);
