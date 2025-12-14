@@ -16,8 +16,8 @@ import type {
  * API endpoints for exchange users
  */
 const ENDPOINTS = {
-  base: '/exchange_users',
-  byId: (id: string) => `/exchange_users/${id}`,
+  base: '/exchange-users',
+  byId: (id: string) => `/exchange-users/${id}`,
 } as const;
 
 /**
