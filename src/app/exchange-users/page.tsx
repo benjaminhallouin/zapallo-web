@@ -13,7 +13,6 @@ import type { ExchangeUser, Exchange } from '@/lib/types';
 import { ExchangeUserList } from '@/components/exchangeUsers/ExchangeUserList';
 import { Loading } from '@/components/ui/Loading';
 import { ErrorMessage } from '@/components/ui/ErrorMessage';
-import { Select } from '@/components/ui/Select';
 
 type SortField = 'name' | 'external_user_id' | 'created_at' | 'updated_at';
 type SortOrder = 'asc' | 'desc';
@@ -27,6 +26,17 @@ export default function ExchangeUsersPage() {
   const [loading, setLoading] = useState(true);
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleSort = (field: SortField) => {
+    if (sortBy === field) {
+      // Toggle sort order if clicking the same field
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Set new field with default desc order
+      setSortBy(field);
+      setSortOrder('desc');
+    }
+  };
 
   // Load exchanges on mount
   const fetchExchanges = async () => {
@@ -76,76 +86,28 @@ export default function ExchangeUsersPage() {
   useEffect(() => {
     fetchExchanges();
   }, []);
-
-  useEffect(() => {
-    fetchUsers();
-  }, [selectedExchangeId, sortBy, sortOrder]);
-
-  if (loading) return <Loading />;
-  if (error && exchanges.length === 0) {
-    return <ErrorMessage message={error} onRetry={fetchExchanges} />;
-  }
-
-  const exchangeOptions = exchanges.map((ex) => ({ value: ex.id, label: ex.display_name }));
-  
-  const sortByOptions = [
-    { value: 'created_at', label: 'Created Date' },
-    { value: 'updated_at', label: 'Updated Date' },
-    { value: 'name', label: 'Name' },
-    { value: 'external_user_id', label: 'External User ID' },
-  ];
-
-  const sortOrderOptions = [
-    { value: 'desc', label: 'Descending' },
-    { value: 'asc', label: 'Ascending' },
-  ];
-
-  return (
-    <div className="space-y-6">
-      {/* Filters and Sort Controls */}
-      <div className="bg-white p-6 rounded-lg shadow space-y-4">
-        <h2 className="text-lg font-semibold text-gray-900">Filters & Sorting</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Exchange Filter */}
-          <Select
-            id="exchange-filter"
-            label="Exchange"
-            options={exchangeOptions}
-            value={selectedExchangeId}
-            onChange={(e) => setSelectedExchangeId(e.target.value)}
-            disabled={exchanges.length === 0}
-            placeholder="Select an exchange"
-            required
-          />
-
-          {/* Sort By */}
-          <Select
-            id="sort-by"
-            label="Sort By"
-            options={sortByOptions}
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as SortField)}
-            disabled={!selectedExchangeId}
-          />
-
-          {/* Sort Order */}
-          <Select
-            id="sort-order"
-            label="Sort Order"
-            options={sortOrderOptions}
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value as SortOrder)}
-            disabled={!selectedExchangeId}
-          />
+return (
+    <>
+      {loadingUsers ? (
+        <Loading />
+      ) : error ? (
+        <ErrorMessage message={error} onRetry={fetchUsers} />
+      ) : selectedExchangeId ? (
+        <ExchangeUserList 
+          users={users} 
+          exchanges={exchanges}
+          selectedExchangeId={selectedExchangeId}
+          onExchangeChange={setSelectedExchangeId}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          onSort={handleSort}
+        />
+      ) : (
+        <div className="text-center py-12">
+          <p className="text-gray-500">Please select an exchange to view users.</p>
         </div>
-
-        {!selectedExchangeId && (
-          <p className="text-sm text-gray-600">
-            Please select an exchange to view users.
-          </p>
-        )}
-      </div>
+      )}
+    </iv>
 
       {/* Users List */}
       {loadingUsers ? (
