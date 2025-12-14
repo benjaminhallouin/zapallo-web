@@ -101,7 +101,7 @@ export async function updateExchangeUser(
   id: string,
   data: UpdateExchangeUserRequest
 ): Promise<ExchangeUser> {
-  return apiClient.put<ExchangeUser>(ENDPOINTS.byId(id), data);
+  return apiClient.patch<ExchangeUser>(ENDPOINTS.byId(id), data);
 }
 
 /**
