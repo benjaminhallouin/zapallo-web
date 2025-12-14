@@ -35,9 +35,35 @@ This application consumes the [Zapallo REST API](https://github.com/benjaminhall
 npm install
 
 # Setup environment variables
-cp .env.example .env.local
+cp .env.local.example .env.local
 # Edit .env.local with your API URL
 ```
+
+### Environment Configuration
+
+The application requires the following environment variables:
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `NEXT_PUBLIC_API_URL` | Yes | `http://localhost:8000` | Base URL of the Zapallo API |
+| `NEXT_PUBLIC_API_TIMEOUT` | No | `30000` | API request timeout in milliseconds |
+
+**Setup steps:**
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.local.example .env.local
+   ```
+
+2. Edit `.env.local` and set your API URL:
+   ```bash
+   NEXT_PUBLIC_API_URL=http://localhost:8000
+   NEXT_PUBLIC_API_TIMEOUT=30000
+   ```
+
+3. The configuration is validated on application startup. If required variables are missing, the application will throw an error with details about which variables need to be set.
+
+**Note**: Never commit `.env.local` to version control. Use `.env.local.example` to document required variables.
 
 ### Development
 

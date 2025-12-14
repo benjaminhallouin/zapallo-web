@@ -4,6 +4,10 @@ import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { MainContent } from '@/components/layout/MainContent';
+import { validateConfig } from '@/lib/config';
+
+// Validate environment configuration on application startup
+validateConfig();
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
