@@ -1,13 +1,43 @@
+/**
+ * Exchanges list page
+ *
+ * Displays all exchanges in a table with loading/error states
+ */
+
+'use client';
+
+import { useEffect, useState } from 'react';
+import { getExchanges } from '@/lib/api';
+import type { Exchange } from '@/lib/types';
+import { ExchangeList } from '@/components/exchanges/ExchangeList';
+import { Loading } from '@/components/ui/Loading';
+import { ErrorMessage } from '@/components/ui/ErrorMessage';
+
 export default function ExchangesPage() {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">Exchanges</h1>
-      <p className="text-gray-600 mb-4">
-        Manage trading platforms and exchanges where cards are bought and sold.
-      </p>
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
-        <p className="text-blue-800 font-semibold">Exchange management features coming soon...</p>
-      </div>
-    </div>
-  );
+  const [exchanges, setExchanges] = useState<Exchange[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchExchanges = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getExchanges();
+      setExchanges(data);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to load exchanges';
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchExchanges();
+  }, []);
+
+  if (loading) return <Loading />;
+  if (error) return <ErrorMessage message={error} onRetry={fetchExchanges} />;
+
+  return <ExchangeList exchanges={exchanges} />;
 }
