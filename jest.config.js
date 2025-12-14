@@ -10,11 +10,20 @@ const createJestConfig = nextJest({
 const config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
-  // Add more setup options before each test is run
+  // Load polyfills first, then setup
+  setupFiles: ['<rootDir>/jest.polyfills.js'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
+  // Transform MSW ESM modules
+  transformIgnorePatterns: [
+    '/node_modules/(?!(msw|@mswjs|@bundled-es-modules|@open-draft|until-async|strict-event-emitter)/)',
+  ],
+  testMatch: [
+    '**/__tests__/**/*.test.{js,jsx,ts,tsx}',
+    '!**/__tests__/mocks/**',
+  ],
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
     '!src/**/*.d.ts',
