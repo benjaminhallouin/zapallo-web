@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ExchangeForm } from '@/components/exchanges/ExchangeForm';
-import { apiClient } from '@/lib/api/client';
+import { createExchange } from '@/lib/api';
 import { Toast } from '@/components/ui/Toast';
 
 type ToastState = {
@@ -25,7 +25,7 @@ export default function NewExchangePage() {
 
   const handleSubmit = async (data: { name: string; display_name: string }) => {
     try {
-      await apiClient.createExchange(data);
+      await createExchange(data);
       setToast({
         show: true,
         message: 'Exchange created successfully!',

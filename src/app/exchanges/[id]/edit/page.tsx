@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ExchangeForm } from '@/components/exchanges/ExchangeForm';
-import { apiClient } from '@/lib/api/client';
+import { getExchange, updateExchange } from '@/lib/api';
 import { Exchange } from '@/lib/types';
 import { Loading } from '@/components/ui/Loading';
 import { ErrorMessage } from '@/components/ui/ErrorMessage';
@@ -35,7 +35,7 @@ export default function EditExchangePage() {
   useEffect(() => {
     const fetchExchange = async () => {
       try {
-        const data = await apiClient.getExchange(id);
+        const data = await getExchange(id);
         setExchange(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load exchange');
@@ -49,7 +49,7 @@ export default function EditExchangePage() {
 
   const handleSubmit = async (data: { name: string; display_name: string }) => {
     try {
-      await apiClient.updateExchange(id, data);
+      await updateExchange(id, data);
       setToast({
         show: true,
         message: 'Exchange updated successfully!',

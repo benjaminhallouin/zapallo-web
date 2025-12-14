@@ -13,7 +13,7 @@ import { Exchange } from '@/lib/types';
 import { Button } from '@/components/ui/Button';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Toast } from '@/components/ui/Toast';
-import { apiClient } from '@/lib/api/client';
+import { deleteExchange } from '@/lib/api';
 
 interface ExchangeDetailProps {
   exchange: Exchange;
@@ -38,7 +38,7 @@ export function ExchangeDetail({ exchange }: ExchangeDetailProps) {
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await apiClient.deleteExchange(exchange.id);
+      await deleteExchange(exchange.id);
       setToast({
         show: true,
         message: 'Exchange deleted successfully!',
