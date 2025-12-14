@@ -51,7 +51,11 @@ export class ApiClient {
   async request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
     const { body, timeout = this.defaultTimeout, ...fetchOptions } = options;
 
-    const url = `${this.baseUrl}${endpoint}`;
+    // Prepend API prefix to endpoint if not already present
+    const fullEndpoint = endpoint.startsWith(config.apiPrefix)
+      ? endpoint
+      : `${config.apiPrefix}${endpoint}`;
+    const url = `${this.baseUrl}${fullEndpoint}`;
 
     // Setup abort controller for timeout
     const controller = new AbortController();

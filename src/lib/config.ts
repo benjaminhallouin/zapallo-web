@@ -29,6 +29,9 @@ export const config = Object.freeze({
   /** Base URL for the Zapallo API */
   apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
 
+  /** API version prefix (e.g., '/api/v1') */
+  apiPrefix: process.env.NEXT_PUBLIC_API_PREFIX || '/api/v1',
+
   /** API request timeout in milliseconds */
   apiTimeout: parseInt(process.env.NEXT_PUBLIC_API_TIMEOUT || '30000', 10),
 
