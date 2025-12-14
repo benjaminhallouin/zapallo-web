@@ -92,7 +92,7 @@ export async function createExchange(data: CreateExchangeRequest): Promise<Excha
  * ```
  */
 export async function updateExchange(id: string, data: UpdateExchangeRequest): Promise<Exchange> {
-  return apiClient.put<Exchange>(ENDPOINTS.byId(id), data);
+  return apiClient.patch<Exchange>(ENDPOINTS.byId(id), data);
 }
 
 /**
