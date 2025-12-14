@@ -20,13 +20,13 @@ describe('config', () => {
 
     it('should not throw error when NEXT_PUBLIC_API_URL is set', () => {
       process.env.NEXT_PUBLIC_API_URL = 'http://localhost:8000';
-      
+
       expect(() => validateConfig()).not.toThrow();
     });
 
     it('should throw error when NEXT_PUBLIC_API_URL is missing', () => {
       delete process.env.NEXT_PUBLIC_API_URL;
-      
+
       expect(() => validateConfig()).toThrow(
         'Missing required environment variables: NEXT_PUBLIC_API_URL'
       );
@@ -34,14 +34,14 @@ describe('config', () => {
 
     it('should throw error with correct message for missing variable', () => {
       delete process.env.NEXT_PUBLIC_API_URL;
-      
+
       expect(() => validateConfig()).toThrow(/NEXT_PUBLIC_API_URL/);
     });
 
     it('should not throw when optional variables are missing', () => {
       process.env.NEXT_PUBLIC_API_URL = 'http://localhost:8000';
       delete process.env.NEXT_PUBLIC_API_TIMEOUT;
-      
+
       expect(() => validateConfig()).not.toThrow();
     });
   });
@@ -60,7 +60,7 @@ describe('config', () => {
     it('should read apiUrl from environment', () => {
       const testUrl = 'http://test-api.example.com';
       process.env.NEXT_PUBLIC_API_URL = testUrl;
-      
+
       // Note: config is frozen and cached, so we need to test via module reload
       // For this test, we'll verify the default behavior
       expect(config.apiUrl).toBeDefined();
@@ -69,14 +69,14 @@ describe('config', () => {
 
     it('should use default apiUrl when not set', () => {
       delete process.env.NEXT_PUBLIC_API_URL;
-      
+
       // The config object uses a default value
       expect(config.apiUrl).toBe('http://localhost:8000');
     });
 
     it('should read apiTimeout from environment', () => {
       process.env.NEXT_PUBLIC_API_TIMEOUT = '5000';
-      
+
       // Config is cached, but we can verify the type
       expect(typeof config.apiTimeout).toBe('number');
     });
@@ -87,7 +87,7 @@ describe('config', () => {
 
     it('should use default apiTimeout when not set', () => {
       delete process.env.NEXT_PUBLIC_API_TIMEOUT;
-      
+
       expect(config.apiTimeout).toBe(30000);
     });
 

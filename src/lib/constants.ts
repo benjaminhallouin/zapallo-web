@@ -1,6 +1,6 @@
 /**
  * Application constants
- * 
+ *
  * Global constants used throughout the application
  */
 
