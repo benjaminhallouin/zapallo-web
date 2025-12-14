@@ -86,14 +86,28 @@ export default function ExchangeUsersPage() {
   useEffect(() => {
     fetchExchanges();
   }, []);
-return (
+
+  useEffect(() => {
+    fetchUsers();
+  }, [selectedExchangeId, sortBy, sortOrder]);
+
+  if (loading) return <Loading />;
+  if (error && exchanges.length === 0) {
+    return <ErrorMessage message={error} onRetry={fetchExchanges} />;
+  }
+
+  return (
     <>
-      {loadingUsers ? (
-        <Loading />
-      ) : error ? (
+      {error ? (
         <ErrorMessage message={error} onRetry={fetchUsers} />
       ) : selectedExchangeId ? (
-        <ExchangeUserList 
+        <div className="relative">
+          {loadingUsers && (
+            <div className="absolute top-0 right-0 mt-2 mr-2">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+            </div>
+          )}
+          <ExchangeUserList 
           users={users} 
           exchanges={exchanges}
           selectedExchangeId={selectedExchangeId}
@@ -102,21 +116,12 @@ return (
           sortOrder={sortOrder}
           onSort={handleSort}
         />
+        </div>
       ) : (
         <div className="text-center py-12">
           <p className="text-gray-500">Please select an exchange to view users.</p>
         </div>
       )}
-    </iv>
-
-      {/* Users List */}
-      {loadingUsers ? (
-        <Loading />
-      ) : error ? (
-        <ErrorMessage message={error} onRetry={fetchUsers} />
-      ) : selectedExchangeId ? (
-        <ExchangeUserList users={users} exchanges={exchanges} />
-      ) : null}
-    </div>
+    </>
   );
 }
