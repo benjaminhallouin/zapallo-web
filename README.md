@@ -5,6 +5,7 @@ A web-based backoffice interface for managing trading card exchange data through
 ## Overview
 
 Zapallo Web is a Next.js application that provides a user-friendly interface for managing:
+
 - **Exchanges**: Trading card platforms and marketplaces
 - **Exchange Users**: Sellers and buyers on these platforms
 - **Exchange Cards**: Trading cards listed on various exchanges
