@@ -6,14 +6,59 @@
 
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Exchange } from '@/lib/types';
+import { Button } from '@/components/ui/Button';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Toast } from '@/components/ui/Toast';
+import { apiClient } from '@/lib/api/client';
 
 interface ExchangeDetailProps {
   exchange: Exchange;
 }
 
+type ToastState = {
+  show: boolean;
+  message: string;
+  type: 'success' | 'error';
+} | null;
+
 export function ExchangeDetail({ exchange }: ExchangeDetailProps) {
+  const router = useRouter();
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [toast, setToast] = useState<ToastState>(null);
+
+  const handleEdit = () => {
+    router.push(`/exchanges/${exchange.id}/edit`);
+  };
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await apiClient.deleteExchange(exchange.id);
+      setToast({
+        show: true,
+        message: 'Exchange deleted successfully!',
+        type: 'success',
+      });
+      // Redirect after a short delay to show the toast
+      setTimeout(() => {
+        router.push('/exchanges');
+      }, 1500);
+    } catch (error) {
+      setToast({
+        show: true,
+        message: error instanceof Error ? error.message : 'Failed to delete exchange',
+        type: 'error',
+      });
+      setIsDeleting(false);
+      setShowDeleteDialog(false);
+    }
+  };
+
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center sm:justify-between">
@@ -40,22 +85,12 @@ export function ExchangeDetail({ exchange }: ExchangeDetailProps) {
           <h1 className="text-2xl font-semibold text-gray-900">{exchange.display_name}</h1>
         </div>
         <div className="mt-4 sm:mt-0 flex space-x-3">
-          <button
-            type="button"
-            disabled
-            className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            title="Edit functionality coming soon"
-          >
+          <Button variant="secondary" onClick={handleEdit}>
             Edit
-          </button>
-          <button
-            type="button"
-            disabled
-            className="inline-flex items-center px-4 py-2 border border-red-300 shadow-sm text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            title="Delete functionality coming soon"
-          >
+          </Button>
+          <Button variant="danger" onClick={() => setShowDeleteDialog(true)}>
             Delete
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -103,6 +138,21 @@ export function ExchangeDetail({ exchange }: ExchangeDetailProps) {
           </div>
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        title="Delete Exchange"
+        message={`Are you sure you want to delete "${exchange.display_name}"? This action cannot be undone.`}
+        confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
+        cancelLabel="Cancel"
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteDialog(false)}
+        variant="danger"
+      />
+
+      {toast?.show && (
+        <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
+      )}
     </div>
   );
 }
