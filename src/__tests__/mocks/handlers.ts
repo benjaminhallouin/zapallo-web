@@ -10,6 +10,8 @@ import { mockExchanges, mockExchangeUsers, mockExchangeCards } from './data';
 
 // Base URL for API (matches config)
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_PREFIX = process.env.NEXT_PUBLIC_API_PREFIX || '/api/v1';
+const API_BASE = `${BASE_URL}${API_PREFIX}`;
 
 /**
  * In-memory data stores for testing
@@ -36,12 +38,12 @@ export const handlers = [
   // ============= Exchange Endpoints =============
 
   // GET /exchanges - List all exchanges
-  rest.get(`${BASE_URL}/exchanges`, (_req, res, ctx) => {
+  rest.get(`${API_BASE}/exchanges`, (_req, res, ctx) => {
     return res(ctx.json(exchanges));
   }),
 
   // GET /exchanges/:id - Get single exchange
-  rest.get(`${BASE_URL}/exchanges/:id`, (req, res, ctx) => {
+  rest.get(`${API_BASE}/exchanges/:id`, (req, res, ctx) => {
     const { id } = req.params;
     const exchange = exchanges.find((e) => e.id === id);
 
@@ -53,7 +55,7 @@ export const handlers = [
   }),
 
   // POST /exchanges - Create exchange
-  rest.post(`${BASE_URL}/exchanges`, async (req, res, ctx) => {
+  rest.post(`${API_BASE}/exchanges`, async (req, res, ctx) => {
     const body = await req.json();
 
     // Check for duplicate name
@@ -77,7 +79,7 @@ export const handlers = [
   }),
 
   // PUT /exchanges/:id - Update exchange
-  rest.put(`${BASE_URL}/exchanges/:id`, async (req, res, ctx) => {
+  rest.put(`${API_BASE}/exchanges/:id`, async (req, res, ctx) => {
     const { id } = req.params;
     const body = await req.json();
 
@@ -106,7 +108,7 @@ export const handlers = [
   }),
 
   // DELETE /exchanges/:id - Delete exchange
-  rest.delete(`${BASE_URL}/exchanges/:id`, (req, res, ctx) => {
+  rest.delete(`${API_BASE}/exchanges/:id`, (req, res, ctx) => {
     const { id } = req.params;
     const exchangeIndex = exchanges.findIndex((e) => e.id === id);
 
@@ -121,12 +123,12 @@ export const handlers = [
   // ============= ExchangeUser Endpoints =============
 
   // GET /exchange_users - List all exchange users
-  rest.get(`${BASE_URL}/exchange_users`, (_req, res, ctx) => {
+  rest.get(`${API_BASE}/exchange_users`, (_req, res, ctx) => {
     return res(ctx.json(exchangeUsers));
   }),
 
   // GET /exchange_users/:id - Get single exchange user
-  rest.get(`${BASE_URL}/exchange_users/:id`, (req, res, ctx) => {
+  rest.get(`${API_BASE}/exchange_users/:id`, (req, res, ctx) => {
     const { id } = req.params;
     const user = exchangeUsers.find((u) => u.id === id);
 
@@ -138,7 +140,7 @@ export const handlers = [
   }),
 
   // POST /exchange_users - Create exchange user
-  rest.post(`${BASE_URL}/exchange_users`, async (req, res, ctx) => {
+  rest.post(`${API_BASE}/exchange_users`, async (req, res, ctx) => {
     const body = await req.json();
 
     const newUser = {
@@ -155,7 +157,7 @@ export const handlers = [
   }),
 
   // PUT /exchange_users/:id - Update exchange user
-  rest.put(`${BASE_URL}/exchange_users/:id`, async (req, res, ctx) => {
+  rest.put(`${API_BASE}/exchange_users/:id`, async (req, res, ctx) => {
     const { id } = req.params;
     const body = await req.json();
 
@@ -176,7 +178,7 @@ export const handlers = [
   }),
 
   // DELETE /exchange_users/:id - Delete exchange user
-  rest.delete(`${BASE_URL}/exchange_users/:id`, (req, res, ctx) => {
+  rest.delete(`${API_BASE}/exchange_users/:id`, (req, res, ctx) => {
     const { id } = req.params;
     const userIndex = exchangeUsers.findIndex((u) => u.id === id);
 
@@ -191,12 +193,12 @@ export const handlers = [
   // ============= ExchangeCard Endpoints =============
 
   // GET /exchange_cards - List all exchange cards
-  rest.get(`${BASE_URL}/exchange_cards`, (_req, res, ctx) => {
+  rest.get(`${API_BASE}/exchange_cards`, (_req, res, ctx) => {
     return res(ctx.json(exchangeCards));
   }),
 
   // GET /exchange_cards/:id - Get single exchange card
-  rest.get(`${BASE_URL}/exchange_cards/:id`, (req, res, ctx) => {
+  rest.get(`${API_BASE}/exchange_cards/:id`, (req, res, ctx) => {
     const { id } = req.params;
     const card = exchangeCards.find((c) => c.id === id);
 
@@ -208,7 +210,7 @@ export const handlers = [
   }),
 
   // POST /exchange_cards - Create exchange card
-  rest.post(`${BASE_URL}/exchange_cards`, async (req, res, ctx) => {
+  rest.post(`${API_BASE}/exchange_cards`, async (req, res, ctx) => {
     const body = await req.json();
 
     const newCard = {
@@ -232,7 +234,7 @@ export const handlers = [
   }),
 
   // PUT /exchange_cards/:id - Update exchange card
-  rest.put(`${BASE_URL}/exchange_cards/:id`, async (req, res, ctx) => {
+  rest.put(`${API_BASE}/exchange_cards/:id`, async (req, res, ctx) => {
     const { id } = req.params;
     const body = await req.json();
 
@@ -253,7 +255,7 @@ export const handlers = [
   }),
 
   // DELETE /exchange_cards/:id - Delete exchange card
-  rest.delete(`${BASE_URL}/exchange_cards/:id`, (req, res, ctx) => {
+  rest.delete(`${API_BASE}/exchange_cards/:id`, (req, res, ctx) => {
     const { id } = req.params;
     const cardIndex = exchangeCards.findIndex((c) => c.id === id);
 
