@@ -9,14 +9,52 @@
 import Link from 'next/link';
 import { ExchangeUser, Exchange } from '@/lib/types';
 
+type SortField = 'name' | 'external_user_id' | 'created_at' | 'updated_at';
+type SortOrder = 'asc' | 'desc';
+
 interface ExchangeUserListProps {
   users: ExchangeUser[];
   exchanges: Exchange[];
+  selectedExchangeId: string;
+  onExchangeChange: (exchangeId: string) => void;
+  sortBy: SortField;
+  sortOrder: SortOrder;
+  onSort: (field: SortField) => void;
 }
 
-export function ExchangeUserList({ users, exchanges }: ExchangeUserListProps) {
+export function ExchangeUserList({ 
+  users, 
+  exchanges, 
+  selectedExchangeId,
+  onExchangeChange,
+  sortBy,
+  sortOrder,
+  onSort 
+}: ExchangeUserListProps) {
   const getExchangeName = (exchangeId: string) => {
     return exchanges.find((e) => e.id === exchangeId)?.display_name ?? 'Unknown Exchange';
+  };
+
+  const getSortIcon = (field: SortField) => {
+    if (sortBy !== field) {
+      return (
+        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+        </svg>
+      );
+    }
+    if (sortOrder === 'asc') {
+      return (
+        <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+        </svg>
+      );
+    }
+    return (
+      <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
+    );
   };
 
   if (users.length === 0) {
@@ -52,11 +90,57 @@ export function ExchangeUserList({ users, exchanges }: ExchangeUserListProps) {
           </Link>
         </div>
       </div>
-      <div className="mt-8 flow-root">
-        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-              <table className="min-w-full divide-y divide-gray-300">
+
+      {/* Segmented Control for Exchange Selection */}
+      <div className="mt-6 flex items-center gap-2">
+        <span className="text-sm font-medium text-gray-700">Exchange:</span>
+        <div className="inline-flex rounded-lg border border-gray-300 bg-white p-1 shadow-sm">
+          {exchanges.map((exchange) => (
+            <button
+              key={exchange.id}
+              type="button"
+              onClick={() => onExchangeChange(exchange.id)}
+              className={`
+                px-4 p<button
+                        type="button"
+                        onClick={() => onSort('name')}
+                        className="group inline-flex items-center gap-1 hover:text-blue-600"
+                      >
+                        Name
+                        {getSortIcon('name')}
+                      </button>
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      Exchange
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => onSort('external_user_id')}
+                        className="group inline-flex items-center gap-1 hover:text-blue-600"
+                      >
+                        External ID
+                        {getSortIcon('external_user_id')}
+                      </button>
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => onSort('created_at')}
+                        className="group inline-flex items-center gap-1 hover:text-blue-600"
+                      >
+                        Created
+                        {getSortIcon('created_at')}
+                      </button>e="min-w-full divide-y divide-gray-300">
                 <thead className="bg-gray-50">
                   <tr>
                     <th
