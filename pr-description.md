@@ -1,33 +1,39 @@
-# Add Mandatory Exchange Filter and Sorting UI
+# Polish ExchangeUser List UI
 
 ## 🎯 Objectif
-Modifier la page de liste des ExchangeUsers pour exiger un filtre exchange obligatoire et ajouter des contrôles de tri côté UI.
+Améliorer l'UX de la liste des ExchangeUsers en éliminant les éléments redondants et en optimisant le feedback visuel pendant le chargement.
 
 ## 🔧 Changements
 
-### API Client (`lib/api/exchangeUsers.ts`)
-- Ajout de l'interface `GetExchangeUsersParams` avec support de `exchange_id`, `sort_by`, `sort_order`
-- Modification de `getExchangeUsers()` pour accepter des paramètres optionnels
-- Construction dynamique de la query string avec URLSearchParams
+### Suppression d'éléments redondants
+- **Label "Exchange:"**: Retiré devant le contrôle segmenté (redondant car self-explanatory)
+- **Colonne Exchange**: Supprimée du tableau car l'utilisateur filtre déjà par exchange
 
-### Page Liste (`app/exchange-users/page.tsx`)
-- **Filtre Exchange Obligatoire**: L'utilisateur doit sélectionner un exchange avant de voir les users
-- **Auto-sélection**: Le premier exchange est auto-sélectionné si disponible
-- **Contrôles de Tri**:
-  - Sort By: name, external_user_id, created_at, updated_at
-  - Sort Order: asc, desc
-- **États de Chargement Séparés**:
-  - `loading` pour exchanges
-  - `loadingUsers` pour users
-- **Message d'invite**: "Please select an exchange to view users" quand aucun exchange sélectionné
-- **Désactivation des contrôles**: Sort disabled si pas d'exchange sélectionné
+### Amélioration du chargement
+- **Avant**: Affichage d'un composant `<Loading />` plein écran causant un clignotement
+- **Après**: Petit spinner (6x6) en haut à droite qui reste discret
+- **Bénéfice**: Les données restent visibles pendant le rechargement, meilleure perception de performance
 
-## 📋 Comportement
-1. Au chargement: Récupération des exchanges, auto-sélection du premier
-2. Sélection exchange: Récupération des users avec tri par défaut (created_at desc)
-3. Changement de tri: Nouvelle récupération des users avec les nouveaux paramètres
-4. Pas d'exchange sélectionné: Liste vide, message d'invite
+### Refactorisation du state
+- Séparation claire entre `loading` (chargement initial) et `loadingUsers` (rafraîchissement)
+- `useEffect` séparés pour chargement initial et rechargement des données
+- Gestion cohérente des états d'erreur
+
+## 🎨 Impact UX
+- ✨ Interface plus épurée et moderne
+- ⚡ Transitions plus fluides sans interruption visuelle
+- 🎯 Focus sur les données importantes (pas de duplication d'informations)
+
+## 📸 Comportement
+1. Au chargement initial: spinner plein écran
+2. Lors du changement d'exchange: petit spinner en haut à droite, données actuelles restent visibles
+3. Lors du tri: même comportement que (2)
+
+## ✅ Tests
+- Vérifier l'affichage du contrôle segmenté (sans label)
+- Vérifier que la colonne Exchange n'apparaît plus dans le tableau
+- Vérifier le comportement du loading lors du changement d'exchange
+- Vérifier le comportement du loading lors du tri
 
 ## 🔗 Liens
-- Epic: EPIC-003 - ExchangeUser Management
-- Related PR (API): https://github.com/benjaminhallouin/zapallo/pull/100
+- Related PR: https://github.com/benjaminhallouin/zapallo-web/pull/33
