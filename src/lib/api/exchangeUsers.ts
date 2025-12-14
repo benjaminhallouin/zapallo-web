@@ -21,19 +21,48 @@ const ENDPOINTS = {
 } as const;
 
 /**
- * Get all exchange users
+ * Parameters for listing exchange users
+ */
+export interface GetExchangeUsersParams {
+  exchange_id?: string;
+  sort_by?: 'name' | 'external_user_id' | 'created_at' | 'updated_at';
+  sort_order?: 'asc' | 'desc';
+}
+
+/**
+ * Get all exchange users with optional filtering and sorting
  *
- * @returns Array of all exchange users
+ * @param params - Filter and sort parameters
+ * @returns Array of exchange users matching criteria
  * @throws {ApiError} On API errors
  *
  * @example
  * ```typescript
- * const users = await getExchangeUsers();
- * console.log(users); // [{ id: '...', name: 'john_doe', ... }]
+ * // Get all users for a specific exchange, sorted by name
+ * const users = await getExchangeUsers({
+ *   exchange_id: '123e4567-...',
+ *   sort_by: 'name',
+ *   sort_order: 'asc'
+ * });
  * ```
  */
-export async function getExchangeUsers(): Promise<ExchangeUser[]> {
-  return apiClient.get<ExchangeUser[]>(ENDPOINTS.base);
+export async function getExchangeUsers(params?: GetExchangeUsersParams): Promise<ExchangeUser[]> {
+  const searchParams = new URLSearchParams();
+  
+  if (params?.exchange_id) {
+    searchParams.append('exchange_id', params.exchange_id);
+  }
+  if (params?.sort_by) {
+    searchParams.append('sort_by', params.sort_by);
+  }
+  if (params?.sort_order) {
+    searchParams.append('sort_order', params.sort_order);
+  }
+
+  const queryString = searchParams.toString();
+  const url = queryString ? `${ENDPOINTS.base}?${queryString}` : ENDPOINTS.base;
+  
+  return apiClient.get<ExchangeUser[]>(url);
 }
 
 /**
