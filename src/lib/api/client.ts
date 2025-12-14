@@ -62,6 +62,7 @@ export class ApiClient {
         ...fetchOptions,
         headers: {
           'Content-Type': 'application/json',
+          'X-API-Key': config.apiKey,
           ...fetchOptions.headers,
         },
         body: body ? JSON.stringify(body) : undefined,

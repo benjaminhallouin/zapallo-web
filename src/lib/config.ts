@@ -31,6 +31,9 @@ export const config = Object.freeze({
 
   /** API request timeout in milliseconds */
   apiTimeout: parseInt(process.env.NEXT_PUBLIC_API_TIMEOUT || '30000', 10),
+
+  /** API key for authentication */
+  apiKey: process.env.NEXT_PUBLIC_API_KEY || '',
 });
 
 /**
