@@ -12,6 +12,7 @@ node_modules/
 # Coverage
 coverage/
 htmlcov/
+*.lcov
 
 # Misc
 .DS_Store
