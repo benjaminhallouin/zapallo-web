@@ -1,23 +1,14 @@
 /**
  * Type exports
- * 
+ *
  * Central export point for all TypeScript types used in the application.
  */
 
 // Common API types
-export type {
-  ApiError,
-  PaginationParams,
-  PaginatedResponse,
-  TimestampFields,
-} from './api';
+export type { ApiError, PaginationParams, PaginatedResponse, TimestampFields } from './api';
 
 // Exchange types
-export type {
-  Exchange,
-  CreateExchangeRequest,
-  UpdateExchangeRequest,
-} from './exchange';
+export type { Exchange, CreateExchangeRequest, UpdateExchangeRequest } from './exchange';
 
 export { isExchange } from './exchange';
 

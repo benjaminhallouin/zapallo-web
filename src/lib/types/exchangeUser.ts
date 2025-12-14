@@ -1,6 +1,6 @@
 /**
  * ExchangeUser types
- * 
+ *
  * Types for ExchangeUser entity - represents a user account on a
  * specific trading platform (seller/buyer).
  */
@@ -9,7 +9,7 @@ import { TimestampFields } from './api';
 
 /**
  * ExchangeUser entity
- * 
+ *
  * Represents a user account on a trading platform.
  * The same physical person may have multiple ExchangeUser records
  * if they have accounts on different platforms.
@@ -17,13 +17,13 @@ import { TimestampFields } from './api';
 export interface ExchangeUser extends TimestampFields {
   /** Unique identifier (UUID) */
   id: string;
-  
+
   /** Foreign key to Exchange (UUID) */
   exchange_id: string;
-  
+
   /** External platform user ID (max 255 chars) */
   external_user_id: string;
-  
+
   /** Username on the platform (max 255 chars) */
   name: string;
 }
@@ -34,33 +34,33 @@ export interface ExchangeUser extends TimestampFields {
 export interface CreateExchangeUserRequest {
   /** Foreign key to Exchange (UUID) */
   exchange_id: string;
-  
+
   /** External platform user ID (max 255 chars) */
   external_user_id: string;
-  
+
   /** Username on the platform (max 255 chars) */
   name: string;
 }
 
 /**
  * Request body for updating an exchange user
- * 
+ *
  * All fields are optional for partial updates
  */
 export interface UpdateExchangeUserRequest {
   /** Foreign key to Exchange (UUID) */
   exchange_id?: string;
-  
+
   /** External platform user ID (max 255 chars) */
   external_user_id?: string;
-  
+
   /** Username on the platform (max 255 chars) */
   name?: string;
 }
 
 /**
  * Type guard to check if an object is an ExchangeUser
- * 
+ *
  * @param obj - Object to check
  * @returns True if object matches ExchangeUser interface
  */

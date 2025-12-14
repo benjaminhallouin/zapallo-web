@@ -1,13 +1,13 @@
 /**
  * Common API types
- * 
+ *
  * Shared types for API communication including error responses,
  * pagination, and request/response wrappers.
  */
 
 /**
  * API error response
- * 
+ *
  * Standard error format returned by the API
  */
 export interface ApiError {
